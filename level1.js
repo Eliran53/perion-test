@@ -1,4 +1,5 @@
 const fs = require('fs')
+const dbHandler = require('./mongoDB')
 
 function transform(file) {
 	try {
@@ -13,7 +14,7 @@ function transform(file) {
 				const row = createRow(rowArray)
 				return row
 			})
-			return transformData
+            dbHandler.insertToCollection(transformData)
 		})
 	} catch (error) {
 		console.error(error)

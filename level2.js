@@ -1,4 +1,6 @@
 const fs = require('fs')
+const dbHandler = require('./mongoDB')
+
 
 function transform(file) {
 	try {
@@ -10,14 +12,12 @@ function transform(file) {
 			const arrayOfData = data?.split('\r\n')?.filter(row => row?.replace(/\s/g, ''))
 			const transformData = arrayOfData.map(rowOfData => {
 				const rowArray = rowOfData?.replaceAll('  ', ';')?.split(';')?.filter(char => char)
-                // console.log(rowArray);
 				if (rowArray) {
 					const row = createRow(rowArray)
 					return row
 				}
 			})
-			console.log(transformData)
-			return transformData
+            dbHandler.insertToCollection(transformData)
 		})
 	} catch (error) {
 		console.error(error)
